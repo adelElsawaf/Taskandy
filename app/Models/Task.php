@@ -13,10 +13,16 @@ class Task extends Model
     use SoftDeletes;
 
 
-    protected $fillable = ['title', 'description', 'status','due_date'];
+    protected $fillable = ['title', 'description', 'status','due_date','project_id'];
 
     protected $casts = [
         'status' => \App\Enums\TaskStatus::class,
         'due_date' => 'datetime'
     ];
+     public function project()
+    {
+        return $this->belongsTo(Project::class)->withDefault([
+            'name' => 'No Project Assigned',
+        ]);
+    }
 }

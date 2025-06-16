@@ -12,9 +12,9 @@ class TaskDTO
         public string $title,
         public ?string $description,
         public TaskStatus $status,
+        public int $projectId,
         public ?Carbon $due_date,
         public ?int $id = null,
-
         public ?Carbon $created_at = null,
         public ?Carbon $updated_at = null,
     ) {}
@@ -28,12 +28,14 @@ class TaskDTO
             title: $task->title,
             description: $task->description,
             status: $task->status,
+            projectId: $task->project_id, // Fetch project_id from the model
             due_date: $task->due_date,
             id: $task->id,
             created_at: $task->created_at,
             updated_at: $task->updated_at,
         );
     }
+
 
     /**
      * Convert the DTO to an array format.
@@ -48,6 +50,7 @@ class TaskDTO
             'due_date' => $this->due_date?->toDateString(),
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),
+            'project_id' => $this->projectId, // Use project_id instead of projectId
         ];
     }
 }

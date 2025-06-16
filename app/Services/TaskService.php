@@ -5,12 +5,15 @@ namespace App\Services;
 use App\DTOs\TaskDTO;
 use App\DTOs\TaskSearchDTO;
 use App\Exceptions\TaskNotFoundException;
-use App\Models\Task;
 use App\Repositories\TaskRepository;
+use App\Services\ProjectService;
 
 class TaskService
 {
-  public function __construct(private TaskRepository $taskRepository) {}
+  public function __construct(
+    private TaskRepository $taskRepository,
+    private ProjectService $projectService,
+  ) {}
 
   public function getTaskById(int $task_id): TaskDTO
   {
@@ -35,9 +38,21 @@ class TaskService
     ];
   }
 
+
+
   public function createTask(TaskDTO $taskDTO): TaskDTO
   {
-    $task = $this->taskRepository->create($taskDTO->toArray());
+    // Validate the project exists
+    $project = $this->projectService->getProjectById($taskDTO->projectId);
+
+    // Prepare task data
+    $taskData = $taskDTO->toArray();
+    $taskData['project_id'] = $project->id; // Ensure project_id is used
+
+    // Create the task
+    $task = $this->taskRepository->create($taskData);
+
+    // Return the task as a DTO
     return TaskDTO::fromModel($task);
   }
 

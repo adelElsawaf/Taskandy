@@ -46,6 +46,7 @@ class TaskController extends Controller
             description: $taskData['description'] ?? null,
             status: TaskStatus::from($taskData['status']),
             due_date: isset($taskData['due_date']) ? Carbon::parse($taskData['due_date']) : null,
+            projectId: $taskData['projectId']
         );
 
         $task = $this->taskService->createTask($taskDTO);
@@ -60,6 +61,8 @@ class TaskController extends Controller
             description: $taskData['description'] ?? null,
             status: TaskStatus::from($taskData['status']),
             due_date: isset($taskData['due_date']) ? Carbon::parse($taskData['due_date']) : null,
+            projectId: $taskData['projectId']
+
         );
         $task = $this->taskService->updateTask($id, $taskDTO);
         return response()->json($task->toArray(), 200);
