@@ -1,15 +1,16 @@
 <?php
+
 namespace App\Exceptions;
 
 use Exception;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class TaskNotFoundException extends NotFoundHttpException
+class ProjectNotFoundException extends NotFoundHttpException
 {
     protected string $description;
 
     public function __construct(
-        string $message = 'Task not found',
+        string $message = 'project not found',
         string $description = 'The requested project was not found in the system.',
     ) {
         parent::__construct($message);
