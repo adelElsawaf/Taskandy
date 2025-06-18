@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
@@ -19,4 +20,16 @@ Route::prefix('projects')->group(callback: function () {
     Route::get('', [ProjectController::class, 'getAllProjects']);
     Route::post('', [ProjectController::class, 'store']);
     Route::put('/{id}', [ProjectController::class, 'update']);
+});
+
+Route::prefix('auth')->group(function () {
+    Route::post('/register', action: [AuthController::class, 'register']);
+    Route::post('/login', action: [AuthController::class, 'login']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('auth')->group(function () {
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::post('logout-all', [AuthController::class, 'logoutAllDevices']);
+    });
 });
