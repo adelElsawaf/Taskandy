@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     public function __construct(
-        private AuthService $authService
+        private AuthService $authService,
     ) {}
     public function register(RegisterRequest $request)
     {
