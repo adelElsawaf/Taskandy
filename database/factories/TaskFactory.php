@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Task;
 use App\Enums\TaskStatus;
+use App\Models\Project;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -29,7 +30,8 @@ class TaskFactory extends Factory
             'title' => fake()->sentence(8), // Generates a title with 4 words
             'description' => fake()->optional()->paragraph(), // Optional paragraph for description
             'status' => TaskStatus::IN_PROGRESS,
-            'due_date' => fake()->optional()->dateTimeBetween('+1 days', '+1 month'), // Optional due date within 1 month
+            'due_date' => fake()->optional()->dateTimeBetween('+1 days', '+1 month'),
+            'project_id' =>Project::inRandomOrder()->first()->id,
         ];
     }
 }
