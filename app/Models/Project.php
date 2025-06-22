@@ -16,4 +16,15 @@ class Project extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    public function memberships()
+    {
+        return $this->hasMany(ProjectMembership::class);
+    }
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'project_memberships')
+            ->withPivot('membership_type', 'joined_at')
+            ->withTimestamps();
+    }
 }
