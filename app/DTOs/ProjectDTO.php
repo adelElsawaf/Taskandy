@@ -2,17 +2,18 @@
 
 namespace App\DTOs;
 
-use Illuminate\Support\Carbon;
 use App\Models\Project;
+use App\DTOs\ProjectMembershipDTOs\ProjectMembershipDTO;
 
 class ProjectDTO
 {
     public function __construct(
         public string $name,
         public ?int $id = null,
-        public ?Carbon $createdAt = null,
-        public ?Carbon $updatedAt = null,
-        public array $tasks = []
+        public ?string $createdAt = null,
+        public ?string $updatedAt = null,
+        public array $tasks = [],
+        public array $memberships = []
     ) {}
 
     public static function fromModel(Project $project): self
@@ -20,9 +21,10 @@ class ProjectDTO
         return new self(
             name: $project->name,
             id: $project->id,
-            createdAt: $project->created_at,
-            updatedAt: $project->updated_at,
-            tasks: $project->tasks->map(fn($task) => TaskDTO::fromModel($task))->toArray() // Map tasks to TaskDTO
+            createdAt: $project->created_at?->toISOString(),
+            updatedAt: $project->updated_at?->toISOString(),
+            tasks: $project->tasks->map(fn($task) => TaskDTO::fromModel($task))->toArray(), // Map tasks to TaskDTO
+            memberships: $project->memberships->map(fn($membership) => ProjectMembershipDTO::fromModel($membership))->toArray() // Map memberships to MembershipDTO
         );
     }
 
@@ -33,6 +35,8 @@ class ProjectDTO
             'id' => $this->id,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
+            'tasks' => $this->tasks,
+            'memberships' => $this->memberships,
         ];
     }
 }

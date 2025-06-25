@@ -6,11 +6,16 @@ use App\DTOs\ProjectDTO;
 use App\DTOs\ProjectSearchDTO;
 use App\Repositories\ProjectRepository;
 use App\Exceptions\ProjectNotFoundException;
+use Illuminate\Validation\UnauthorizedException;
+use Illuminate\Support\Facades\Log;
+
 
 class ProjectService
 {
     public function __construct(
+        private AuthService $authService,
         private ProjectRepository $projectRepository,
+        private ProjectMembershipService $projectMembershipService,
     ) {}
     public function getProjectById($id)
     {
@@ -33,10 +38,20 @@ class ProjectService
             ]
         ];
     }
-    public function createProject(ProjectDTO $project)
+    public function createProject(ProjectDTO $project): ProjectDTO
     {
-        $project = $this->projectRepository->create($project->toArray());
-        return ProjectDTO::fromModel($project);
+        // Create the project
+        $projectModel = $this->projectRepository->create($project->toArray());
+        // Get the logged-in user
+        $loggedInUser = $this->authService->getLoggedInUser();
+        if (!$loggedInUser) {
+            throw new UnauthorizedException('No logged-in user found.');
+        }
+        // Assign the logged-in user as the project owner
+        $this->projectMembershipService->assignProjectOwner($loggedInUser->id, $projectModel->id);
+        $test = ProjectDTO::fromModel($projectModel);
+        // Return the project DTO
+        return $test;
     }
 
     public function updateProject(int $id, ProjectDTO $project): ProjectDTO

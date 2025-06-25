@@ -10,7 +10,7 @@ class ProjectRepository
 
     public function getProjectById($id)
     {
-        $project = Project::with('tasks')->find($id);
+        $project = Project::with('tasks', 'memberships.user')->find($id);
         return $project;
     }
     public function create(array $data): Project
@@ -26,7 +26,7 @@ class ProjectRepository
     }
     public function searchProjects(ProjectSearchDTO $searchParams)
     {
-        $query = Project::query()->with('tasks');
+        $query = Project::query()->with('tasks', 'memberships.user');
         if ($searchParams->name) {
             $query->where("name", "like", "%" . $searchParams->name . "%");
         }

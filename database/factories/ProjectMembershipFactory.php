@@ -15,7 +15,6 @@ class ProjectMembershipFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
             'project_id' => Project::factory(), // Ensure ProjectFactory exists
             'user_id' => User::factory(),       // Ensure UserFactory exists
             'membership_type' => $this->faker->randomElement(ProjectMembershipType::values()),

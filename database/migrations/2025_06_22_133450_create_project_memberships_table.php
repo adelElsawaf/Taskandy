@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('project_memberships', function (Blueprint $table) {
             $table->id();
-            $table->string(column: 'name');
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('membership_type', ProjectMembershipType::values())->default(ProjectMembershipType::MEMBER->value);

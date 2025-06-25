@@ -7,6 +7,7 @@ use App\DTOs\AuthDTOs\LoginDto;
 use App\DTOs\AuthDTOs\LoginResponseDto;
 use App\DTOs\AuthDTOs\RegisterDTO;
 use App\DTOs\UserDTOs\UserDto;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -59,4 +60,8 @@ class AuthService
         $user->tokens()->delete();
         return true;
     }
+    public function getLoggedInUser(){
+          return Auth::user();
+    }
+    
 }
