@@ -7,14 +7,17 @@ use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 // Task Routes
-Route::prefix('tasks')->group(function () {
-    Route::get('/{id}', [TaskController::class, 'getTaskById']);
-    Route::get('', [TaskController::class, 'getAllTasks']);
-    Route::post('', [TaskController::class, 'store']);
-    Route::put('/{id}', [TaskController::class, 'update']);
-    Route::delete('/{id}/soft', [TaskController::class, 'softDelete']);
-    Route::delete('/{id}/hard', [TaskController::class, 'hardDelete']);
-});
+Route::prefix('tasks')
+    ->middleware('auth:sanctum')
+    ->group(function (): void {
+        Route::get('/{id}', [TaskController::class, 'getTaskById']);
+        Route::get('', [TaskController::class, 'getAllTasks']);
+        Route::post('', [TaskController::class, 'store']);
+        Route::post('/assign', [TaskController::class, 'assignTask']);
+        Route::put('/{id}', [TaskController::class, 'update']);
+        Route::delete('/{id}/soft', [TaskController::class, 'softDelete']);
+        Route::delete('/{id}/hard', [TaskController::class, 'hardDelete']);
+    });
 
 // Project Routes
 Route::prefix('projects')

@@ -58,4 +58,8 @@ class User extends Authenticatable
             ->withPivot('membership_type', 'joined_at')
             ->withTimestamps();
     }
+    public function assignedTasks()
+    {
+        return $this->hasMany(Task::class, 'assigned_to', 'id');
+    }
 }

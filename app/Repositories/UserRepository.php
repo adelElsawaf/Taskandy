@@ -17,9 +17,16 @@ class UserRepository
     {
         return User::where('email', $email)->first();
     }
-
-    public function findById(int $id): ?User
+    public function findByIdIncludingTasks(int $id)
     {
-        return User::find($id);
+        return User::where('id', $id)->with("assignedTasks")->first();
+    }
+    public function findByEmailIncludingTasks(string $email): ?User
+    {
+        return User::where('email', $email)->with("assignedTasks")->first();
+    }
+    public function findById($id)
+    {
+        return User::where("id", $id)->first();
     }
 }

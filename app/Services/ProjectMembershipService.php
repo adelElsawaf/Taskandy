@@ -71,4 +71,10 @@ class ProjectMembershipService
         $this->projectMembershipRepository->removeMemberFromProject($userId, $projectId);
         return "removed successfully";
     }
+   public function getMembershipInProject(int $userId, int $projectId){
+        return $this->projectMembershipRepository->getUserMembershipInProject(
+            $userId,
+            $projectId
+        );
+   }
 }

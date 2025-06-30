@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Task;
 use App\Enums\TaskStatus;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -31,7 +32,8 @@ class TaskFactory extends Factory
             'description' => fake()->optional()->paragraph(), // Optional paragraph for description
             'status' => TaskStatus::IN_PROGRESS,
             'due_date' => fake()->optional()->dateTimeBetween('+1 days', '+1 month'),
-            'project_id' =>Project::inRandomOrder()->first()->id,
+            'assigned_to' => User::inRandomOrder()->first()->id,
+            'project_id' => Project::inRandomOrder()->first()->id,
         ];
     }
 }

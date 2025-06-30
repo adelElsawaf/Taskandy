@@ -8,6 +8,7 @@ use App\Exceptions\TaskNotFoundException;
 use Illuminate\Http\Request;
 use App\Services\TaskService;
 use App\DTOs\TaskSearchDTO;
+use App\Http\Requests\AssignTaskRequest;
 use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Carbon;
 
@@ -75,5 +76,13 @@ class TaskController extends Controller
     public function hardDelete(int $id)
     {
         return response()->json($this->taskService->hardDeleteTask($id), 204);
+    }
+    public function assignTask(AssignTaskRequest $request)
+    {
+        $data = $request->validated();
+        $this->taskService->assignTaskToUser($data['task_id'], $data['user_id']);
+        return response()->json([
+            'message' => 'Task successfully assigned to user.',
+        ], 200);
     }
 }

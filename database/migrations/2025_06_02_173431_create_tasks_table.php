@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('status')
                 ->nullable(false)
                 ->default(TaskStatus::NOT_STARTED->value); // Default to NOT_STARTED
+            $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('cascade');
             $table->date('due_date')->nullable();
             $table->timestamps();
 

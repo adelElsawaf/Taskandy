@@ -49,4 +49,9 @@ class TaskRepository
         $task = Task::withTrashed()->findOrFail($task_id);
         $task->forceDelete();
     }
+
+    public function save(Task $task)
+    {
+        return $task->save();
+    }
 }

@@ -35,7 +35,7 @@ class AuthService
 
     public function login(LoginDto $loginDTO): array
     {
-        $user = $this->userService->getByEmail($loginDTO->email);
+        $user = $this->userService->getUserWithTasksByEmail($loginDTO->email);
         if (!$user || !Hash::check($loginDTO->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],

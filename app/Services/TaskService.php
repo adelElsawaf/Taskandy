@@ -5,14 +5,20 @@ namespace App\Services;
 use App\DTOs\TaskDTO;
 use App\DTOs\TaskSearchDTO;
 use App\Exceptions\TaskNotFoundException;
+use App\Models\ProjectMembership;
 use App\Repositories\TaskRepository;
 use App\Services\ProjectService;
+use Illuminate\Validation\UnauthorizedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TaskService
 {
   public function __construct(
     private TaskRepository $taskRepository,
     private ProjectService $projectService,
+    private ProjectMembershipService $projectMembershipService,
+    private UserService $userService,
+    private AuthService $authService,
   ) {}
 
   public function getTaskById(int $task_id): TaskDTO
@@ -69,5 +75,33 @@ class TaskService
   public function hardDeleteTask(int $id): void
   {
     $this->taskRepository->hardDelete($id);
+  }
+
+  public function assignTaskToUser($taskId, $userId)
+  {
+    $user = $this->userService->getUserAsEntityById($userId);
+    if (!$user) {
+      throw new NotFoundHttpException("User with ID $userId not found.");
+    }
+
+    $task = $this->taskRepository->getTaskById($taskId);
+    if (!$task) {
+      throw new TaskNotFoundException("Task with ID $taskId not found.");
+    }
+
+    $loggedInUser = $this->authService->getLoggedInUser();
+    if (!$loggedInUser) {
+      throw new UnauthorizedException('No logged-in user found.');
+    }
+
+    $membershipInProject = $this->projectMembershipService->getMembershipInProject($loggedInUser->id, $task->project_id);
+
+    // Updated null check and membership permission validation
+    if (!$membershipInProject || !$membershipInProject->membership_type->canManageTasks()) {
+      throw new UnauthorizedException('User cannot assign tasks.');
+    }
+
+    $task->assigned_to = $user->id;
+    $this->taskRepository->save($task);
   }
 }
