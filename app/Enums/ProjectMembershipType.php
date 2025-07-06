@@ -60,4 +60,8 @@ enum ProjectMembershipType: string
     {
         return in_array($this, [self::OWNER, self::ADMIN, self::MEMBER]);
     }
+    public function canManageProjects(): bool
+    {
+        return in_array($this, [self::OWNER, self::ADMIN]);
+    }
 }

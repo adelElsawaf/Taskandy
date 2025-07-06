@@ -1,7 +1,8 @@
 <?php
 
 namespace App\DTOs\ProjectMembershipDTOs;
-use App\DTOs\UserDTOs\UserDto;
+
+use App\DTOs\UserDTOs\UserDTO;
 use App\Models\ProjectMembership;
 
 class ProjectMembershipDTO
@@ -23,7 +24,7 @@ class ProjectMembershipDTO
             userId: $membership->user_id,
             membershipType: $membership->membership_type->value, // Cast enum to string
             joinedAt: $membership->joined_at?->toISOString(),
-            user: UserDto::fromModel($membership->user)->toArray() // Access `user` as a property
+            user: UserDTO::fromModel($membership->user)->toArray() // Access `user` as a property
         );
     }
 

@@ -11,7 +11,7 @@ Route::prefix('tasks')
     ->middleware('auth:sanctum')
     ->group(function (): void {
         Route::get('/{id}', [TaskController::class, 'getTaskById']);
-        Route::get('', [TaskController::class, 'getAllTasks']);
+        Route::get('/project/{projectId}', [TaskController::class, 'getAllTasks']);
         Route::post('', [TaskController::class, 'store']);
         Route::post('/assign', [TaskController::class, 'assignTask']);
         Route::put('/{id}', [TaskController::class, 'update']);

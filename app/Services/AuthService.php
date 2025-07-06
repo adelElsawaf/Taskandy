@@ -3,10 +3,10 @@
 
 namespace App\Services;
 
-use App\DTOs\AuthDTOs\LoginDto;
-use App\DTOs\AuthDTOs\LoginResponseDto;
+use App\DTOs\AuthDTOs\LoginDTO;
+use App\DTOs\AuthDTOs\LoginResponseDTO;
 use App\DTOs\AuthDTOs\RegisterDTO;
-use App\DTOs\UserDTOs\UserDto;
+use App\DTOs\UserDTOs\UserDTO;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -25,15 +25,15 @@ class AuthService
         }
         $registeredUser = $this->userService->create(data: $registerDTO->toArray());
         $token = $registeredUser->createToken('auth_token')->plainTextToken;
-        $response = new LoginResponseDto(
-            user: UserDto::fromModel($registeredUser)->toArray(),
+        $response = new LoginResponseDTO(
+            user: UserDTO::fromModel($registeredUser)->toArray(),
             token: $token,
             tokenType: 'Bearer'
         );
         return $response->toArray();
     }
 
-    public function login(LoginDto $loginDTO): array
+    public function login(LoginDTO $loginDTO): array
     {
         $user = $this->userService->getUserWithTasksByEmail($loginDTO->email);
         if (!$user || !Hash::check($loginDTO->password, $user->password)) {
@@ -42,8 +42,8 @@ class AuthService
             ]);
         }
         $token = $user->createToken('auth_token')->plainTextToken;
-        $response = new LoginResponseDto(
-            user: UserDto::fromModel($user)->toArray(),
+        $response = new LoginResponseDTO(
+            user: UserDTO::fromModel($user)->toArray(),
             token: $token,
             tokenType: 'bearer'
         );
@@ -60,8 +60,8 @@ class AuthService
         $user->tokens()->delete();
         return true;
     }
-    public function getLoggedInUser(){
-          return Auth::user();
+    public function getLoggedInUser()
+    {
+        return Auth::user();
     }
-    
 }

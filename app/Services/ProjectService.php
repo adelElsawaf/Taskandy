@@ -7,11 +7,12 @@ use App\DTOs\ProjectSearchDTO;
 use App\Repositories\ProjectRepository;
 use App\Exceptions\ProjectNotFoundException;
 use Illuminate\Validation\UnauthorizedException;
-use Illuminate\Support\Facades\Log;
 
 
 class ProjectService
 {
+
+    // add check of user for all projects endpoints 
     public function __construct(
         private AuthService $authService,
         private ProjectRepository $projectRepository,
@@ -24,6 +25,11 @@ class ProjectService
             throw new ProjectNotFoundException("Project Doesn't Exist");
         }
         return ProjectDTO::fromModel($project);
+    }
+    public function getProjectByIdSecured($projectId)
+    {
+        $this->ensureCurrentUserCanManageProject($projectId);
+        return $this->getProjectById($projectId);
     }
     public function getAllProjects(ProjectSearchDTO $searchParams)
     {
@@ -56,7 +62,25 @@ class ProjectService
 
     public function updateProject(int $id, ProjectDTO $project): ProjectDTO
     {
+        $this->ensureCurrentUserCanManageProject($id);
         $project = $this->projectRepository->update($id, $project->toArray());
         return ProjectDTO::fromModel($project);
+    }
+
+    private function ensureCurrentUserCanManageProject(int $project_id): void
+    {
+        $loggedInUser = $this->authService->getLoggedInUser();
+        if (!$loggedInUser) {
+            throw new UnauthorizedException('No logged-in user found.');
+        }
+
+        $membership = $this->projectMembershipService->getMembershipInProject(
+            $loggedInUser->id,
+            $project_id
+        );
+
+        if (!$membership || !$membership->membership_type->canManageProjects()) {
+            throw new UnauthorizedException('User cannot manage this project');
+        }
     }
 }

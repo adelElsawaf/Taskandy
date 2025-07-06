@@ -3,7 +3,7 @@
 
 namespace App\DTOs\AuthDTOs;
 
-class LoginDto
+class LoginDTO
 {
     public function __construct(
         public readonly string $email,

@@ -6,6 +6,7 @@ use App\DTOs\TaskDTO;
 use App\DTOs\TaskSearchDTO;
 use App\Exceptions\TaskNotFoundException;
 use App\Models\ProjectMembership;
+use App\Models\Task;
 use App\Repositories\TaskRepository;
 use App\Services\ProjectService;
 use Illuminate\Validation\UnauthorizedException;
@@ -21,18 +22,20 @@ class TaskService
     private AuthService $authService,
   ) {}
 
-  public function getTaskById(int $task_id): TaskDTO
+  public function getTaskById(int $task_id)
   {
     $task = $this->taskRepository->getTaskById($task_id);
     if (!$task) {
       throw new TaskNotFoundException("Task not found", "Task with ID $task_id was not found");
     }
+    $this->ensureCurrentUserCanManageTask($task->project_id);
     return $task ? TaskDTO::fromModel($task) : null;
   }
 
-  public function getAllTasks(TaskSearchDTO $searchParams)
+  public function getAllTasks(int $project_id, TaskSearchDTO $searchParams)
   {
-    $tasks = $this->taskRepository->searchTasks($searchParams);
+    $this->ensureCurrentUserCanManageTask($project_id);
+    $tasks = $this->taskRepository->searchTasks($project_id, $searchParams);
     return [
       'data' => $tasks->map(fn($task) => TaskDTO::fromModel($task)),
       'pagination' => [
@@ -44,13 +47,11 @@ class TaskService
     ];
   }
 
-
-
   public function createTask(TaskDTO $taskDTO): TaskDTO
   {
     // Validate the project exists
     $project = $this->projectService->getProjectById($taskDTO->projectId);
-
+    $this->ensureCurrentUserCanManageTask($project->id);
     // Prepare task data
     $taskData = $taskDTO->toArray();
     $taskData['project_id'] = $project->id; // Ensure project_id is used
@@ -65,6 +66,8 @@ class TaskService
   public function updateTask(int $id, TaskDTO $taskDTO): TaskDTO
   {
     $task = $this->taskRepository->update($id, $taskDTO->toArray());
+    $this->ensureCurrentUserCanManageTask(project_id: $task->project->id);
+
     return TaskDTO::fromModel($task);
   }
 
@@ -88,20 +91,25 @@ class TaskService
     if (!$task) {
       throw new TaskNotFoundException("Task with ID $taskId not found.");
     }
+    $this->ensureCurrentUserCanManageTask($task->project->id);
 
+    $task->assigned_to = $user->id;
+    $this->taskRepository->save($task);
+  }
+  private function ensureCurrentUserCanManageTask(int $project_id): void
+  {
     $loggedInUser = $this->authService->getLoggedInUser();
     if (!$loggedInUser) {
       throw new UnauthorizedException('No logged-in user found.');
     }
 
-    $membershipInProject = $this->projectMembershipService->getMembershipInProject($loggedInUser->id, $task->project_id);
+    $membership = $this->projectMembershipService->getMembershipInProject(
+      $loggedInUser->id,
+      $project_id
+    );
 
-    // Updated null check and membership permission validation
-    if (!$membershipInProject || !$membershipInProject->membership_type->canManageTasks()) {
-      throw new UnauthorizedException('User cannot assign tasks.');
+    if (!$membership || !$membership->membership_type->canManageTasks()) {
+      throw new UnauthorizedException('User cannot manage tasks in this project.');
     }
-
-    $task->assigned_to = $user->id;
-    $this->taskRepository->save($task);
   }
 }

@@ -2,9 +2,9 @@
 
 namespace App\DTOs\AuthDTOs;
 
-use App\DTOs\UserDTOs\UserDto;
+use App\DTOs\UserDTOs\UserDTO;
 
-class LoginResponseDto
+class LoginResponseDTO
 {
     public function __construct(
         public array $user,
@@ -12,7 +12,7 @@ class LoginResponseDto
         public string $tokenType
     ) {}
 
-    public static function fromData(UserDto $userDto, string $token): self
+    public static function fromData(UserDTO $userDto, string $token): self
     {
         return new self(
             user: $userDto->toArray(),

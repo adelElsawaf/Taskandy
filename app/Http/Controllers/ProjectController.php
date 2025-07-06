@@ -14,7 +14,7 @@ class ProjectController extends Controller
 
     public function getProjectById($id)
     {
-        return  response()->json($this->projectService->getProjectById($id), 200);
+        return  response()->json($this->projectService->getProjectByIdSecured($id), 200);
     }
     public function getAllProjects(Request $request)
     {

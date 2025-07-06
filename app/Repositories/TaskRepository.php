@@ -9,12 +9,12 @@ class TaskRepository
 {
     public function getTaskById($id)
     {
-        $task = Task::find($id);
+        $task = Task::with("assignedTo")->find($id);
         return $task;
     }
-    public function searchTasks(TaskSearchDTO $searchParams)
+    public function searchTasks(int $project_id, TaskSearchDTO $searchParams)
     {
-        $query = Task::query();
+        $query = Task::query()->where("project_id", $project_id);
         if ($searchParams->title) {
             $query->where("title", "like", "%" . $searchParams->title . "%");
         }

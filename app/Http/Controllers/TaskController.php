@@ -25,7 +25,7 @@ class TaskController extends Controller
         $task = $this->taskService->getTaskById($id);
         return response()->json($task);
     }
-    public function getAllTasks(Request $request)
+    public function getAllTasks(Request $request, int $projectId)
     {
         $taskSearchDTO = new TaskSearchDTO(
             title: $request->get('title'),
@@ -35,7 +35,7 @@ class TaskController extends Controller
             size: $request->get('size', 15)
         );
 
-        $tasks = $this->taskService->getAllTasks($taskSearchDTO);
+        $tasks = $this->taskService->getAllTasks($projectId, $taskSearchDTO);
         return response()->json($tasks);
     }
 
