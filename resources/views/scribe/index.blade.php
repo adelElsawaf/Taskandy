@@ -142,7 +142,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: July 6, 2025</li>
+        <li>Last updated: July 7, 2025</li>
     </ul>
 </div>
 
@@ -782,7 +782,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"title\": \"b\",
     \"description\": \"Eius et animi quos velit et.\",
     \"status\": \"completed\",
-    \"due_date\": \"2051-07-30\",
+    \"due_date\": \"2051-07-31\",
     \"projectId\": 16
 }"
 </code></pre></div>
@@ -802,7 +802,7 @@ let body = {
     "title": "b",
     "description": "Eius et animi quos velit et.",
     "status": "completed",
-    "due_date": "2051-07-30",
+    "due_date": "2051-07-31",
     "projectId": 16
 };
 
@@ -927,10 +927,10 @@ Must be one of:
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="due_date"                data-endpoint="POSTapi-tasks"
-               value="2051-07-30"
+               value="2051-07-31"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after or equal to <code>today</code>. Example: <code>2051-07-30</code></p>
+<p>Must be a valid date. Must be a date after or equal to <code>today</code>. Example: <code>2051-07-31</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>projectId</code></b>&nbsp;&nbsp;
@@ -1106,8 +1106,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --data "{
     \"title\": \"b\",
     \"description\": \"Eius et animi quos velit et.\",
-    \"status\": \"completed\",
-    \"due_date\": \"2051-07-30\",
+    \"status\": \"in_progress\",
+    \"due_date\": \"2051-07-31\",
     \"projectId\": 16
 }"
 </code></pre></div>
@@ -1126,8 +1126,8 @@ const headers = {
 let body = {
     "title": "b",
     "description": "Eius et animi quos velit et.",
-    "status": "completed",
-    "due_date": "2051-07-30",
+    "status": "in_progress",
+    "due_date": "2051-07-31",
     "projectId": 16
 };
 
@@ -1251,10 +1251,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-tasks--id-"
-               value="completed"
+               value="in_progress"
                data-component="body">
     <br>
-<p>Example: <code>completed</code></p>
+<p>Example: <code>in_progress</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>not_started</code></li> <li><code>in_progress</code></li> <li><code>completed</code></li></ul>
         </div>
@@ -1264,10 +1264,10 @@ Must be one of:
 <i>optional</i> &nbsp;
                 <input type="text" style="display: none"
                               name="due_date"                data-endpoint="PUTapi-tasks--id-"
-               value="2051-07-30"
+               value="2051-07-31"
                data-component="body">
     <br>
-<p>Must be a valid date. Must be a date after or equal to <code>today</code>. Example: <code>2051-07-30</code></p>
+<p>Must be a valid date. Must be a date after or equal to <code>today</code>. Example: <code>2051-07-31</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>projectId</code></b>&nbsp;&nbsp;

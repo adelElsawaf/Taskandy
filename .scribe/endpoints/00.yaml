@@ -319,7 +319,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
         required: false
-        example: '2051-07-30'
+        example: '2051-07-31'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -339,7 +339,7 @@ endpoints:
       title: b
       description: 'Eius et animi quos velit et.'
       status: completed
-      due_date: '2051-07-30'
+      due_date: '2051-07-31'
       projectId: 16
     fileParameters: []
     responses: []
@@ -457,7 +457,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: completed
+        example: in_progress
         type: string
         enumValues:
           - not_started
@@ -470,7 +470,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
         required: false
-        example: '2051-07-30'
+        example: '2051-07-31'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -489,8 +489,8 @@ endpoints:
     cleanBodyParameters:
       title: b
       description: 'Eius et animi quos velit et.'
-      status: completed
-      due_date: '2051-07-30'
+      status: in_progress
+      due_date: '2051-07-31'
       projectId: 16
     fileParameters: []
     responses: []
