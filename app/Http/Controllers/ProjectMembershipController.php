@@ -23,11 +23,11 @@ class ProjectMembershipController extends Controller
             membershipType: $validated['membership_type']
         );
 
-        $response = $this->projectMembershipService->addMemberToProject($dto);
+        $this->projectMembershipService->addMemberToProject($dto);
 
         return response()->json([
             'message' => 'Membership added successfully',
-            'data' => $response,
+            'data' => "added successfully",
         ], 201);
     }
     public function removeMemberFromProject(int $projectId, int $userId)

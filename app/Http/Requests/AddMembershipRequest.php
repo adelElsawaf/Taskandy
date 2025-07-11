@@ -18,6 +18,8 @@ class AddMembershipRequest extends FormRequest
         return [
             'user_id' => ['required', 'exists:users,id'], // Split rules into an array
             'project_id' => ['required', 'exists:projects,id'], // Split rules into an array
+            'membership_type' => ['required', new Enum(ProjectMembershipType::class)],
+
         ];
     }
 }

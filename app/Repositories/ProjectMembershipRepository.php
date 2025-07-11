@@ -16,12 +16,14 @@ class ProjectMembershipRepository
         return ProjectMembership::where("id", $id)->delete();
     }
 
-    public function getUserMembershipInProject(int $userId, int $projectId)
+    public function getUserMembershipInProject(int $userId, int $projectId) 
     {
-        return ProjectMembership::where('user_id', $userId)
+        return ProjectMembership::with(['user', 'project'])
+            ->where('user_id', $userId)
             ->where('project_id', $projectId)
             ->first();
     }
+
 
     public function removeMemberFromProject(int $userId, int $projectId)
     {
