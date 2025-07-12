@@ -24,12 +24,18 @@ class ProjectRepository
         $project->update($data);
         return $project;
     }
-    public function searchProjects(ProjectSearchDTO $searchParams)
+    public function searchProjectsForUser($userId, ProjectSearchDTO $searchParams)
     {
-        $query = Project::query()->with('tasks', 'memberships.user');
+        $query = Project::query()
+            ->with('tasks', 'memberships.user')
+            ->whereHas('memberships', function ($q) use ($userId) {
+                $q->where('user_id', $userId);
+            });
+
         if ($searchParams->name) {
-            $query->where("name", "like", "%" . $searchParams->name . "%");
+            $query->where('name', 'like', '%' . $searchParams->name . '%');
         }
+
         return $query->paginate($searchParams->size, ['*'], 'page', $searchParams->page);
     }
 }

@@ -23,8 +23,8 @@ Route::prefix('tasks')
 Route::prefix('projects')
     ->middleware('auth:sanctum')
     ->group(function () {
+        Route::get('/user', [ProjectController::class, 'getAllProjectsForUser']);
         Route::get('/{id}', [ProjectController::class, 'getProjectById']);
-        Route::get('', [ProjectController::class, 'getAllProjects']);
         Route::post('', [ProjectController::class, 'store']);
         Route::put('/{id}', [ProjectController::class, 'update']);
     });
@@ -48,6 +48,7 @@ Route::prefix('/projects/memberships')
     ->middleware('auth:sanctum')
     ->group(function () {
         Route::post('', [ProjectMembershipController::class, 'addMemberToProject']);
+        Route::get('/{projectId}', [ProjectMembershipController::class, 'getAllProjectMembers']);
     });
 
 Route::middleware('auth:sanctum')

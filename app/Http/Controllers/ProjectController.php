@@ -16,12 +16,12 @@ class ProjectController extends Controller
     {
         return  response()->json($this->projectService->getProjectByIdSecured($id), 200);
     }
-    public function getAllProjects(Request $request)
+    public function getAllProjectsForUser(Request $request)
     {
         $searchParams =  new ProjectSearchDTO(
             name: $request->get("name")
         );
-        return response()->json($this->projectService->getAllProjects($searchParams), 200);
+        return response()->json($this->projectService->getAllProjectsForUser($searchParams), 200);
     }
 
     public function store(ProjectRequest $request)

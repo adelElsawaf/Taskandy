@@ -31,9 +31,13 @@ class ProjectService
         $this->ensureCurrentUserCanManageProject($projectId);
         return $this->getProjectById($projectId);
     }
-    public function getAllProjects(ProjectSearchDTO $searchParams)
+    public function getAllProjectsForUser(ProjectSearchDTO $searchParams)
     {
-        $projects = $this->projectRepository->searchProjects($searchParams);
+        $loggedInUser = $this->authService->getLoggedInUser();
+        if (!$loggedInUser) {
+            throw new UnauthorizedException('No logged-in user found.');
+        }
+        $projects = $this->projectRepository->searchProjectsForUser($loggedInUser->id, $searchParams);
         return [
             'data' => $projects->map(fn($task) => ProjectDTO::fromModel($task)),
             'pagination' => [

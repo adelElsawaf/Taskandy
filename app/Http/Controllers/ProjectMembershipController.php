@@ -39,4 +39,13 @@ class ProjectMembershipController extends Controller
             'message' => 'Member removed successfully.'
         ], 200);
     }
+    public function getAllProjectMembers(int $projectId)
+    {
+        $members = $this->projectMembershipService->getAllProjectMembers($projectId);
+
+        return response()->json([
+            'message' => 'Project members retrieved successfully.',
+            'data' => $members,
+        ], 200);
+    }
 }

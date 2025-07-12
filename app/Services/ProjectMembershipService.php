@@ -5,11 +5,13 @@ namespace App\Services;
 
 use App\DTOs\ProjectInvitationDTO;
 use App\DTOs\ProjectMembershipDTOs\CreateProjectMembershipDTO;
+use App\DTOs\UserDTOs\UserDTO;
 use App\Enums\ProjectMembershipType;
 use App\Jobs\SendProjectInvitationJob;
 use App\Repositories\ProjectMembershipRepository;
 use App\Services\AuthService;
 use Illuminate\Validation\UnauthorizedException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class ProjectMembershipService
@@ -98,5 +100,24 @@ class ProjectMembershipService
             $userId,
             $projectId
         );
+    }
+    public function getAllProjectMembers(int $projectId)
+    {
+        $loggedInUser = $this->authService->getLoggedInUser();
+        if (!$loggedInUser) {
+            throw new UnauthorizedException('No logged-in user found.');
+        }
+        $loggedInUserMembership = $this->projectMembershipRepository->getUserMembershipInProject(
+            $loggedInUser->id,
+            $projectId
+        );
+        if (!$loggedInUserMembership || !$loggedInUserMembership->membership_type->canManageProject()) {
+            throw new UnauthorizedHttpException('User cant remove members');
+        }
+        $projectMembers = $this->projectMembershipRepository->getAllProjectMembers($projectId);
+        if ($projectMembers->isEmpty()) {
+            throw new UnprocessableEntityHttpException('No members found for this project.');
+        }
+        return $projectMembers->map(fn($user) => UserDTO::fromModel($user));
     }
 }
