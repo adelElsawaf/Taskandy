@@ -306,7 +306,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: completed
+        example: not_started
         type: string
         enumValues:
           - not_started
@@ -319,7 +319,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
         required: false
-        example: '2051-07-31'
+        example: '2051-08-05'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -338,8 +338,8 @@ endpoints:
     cleanBodyParameters:
       title: b
       description: 'Eius et animi quos velit et.'
-      status: completed
-      due_date: '2051-07-31'
+      status: not_started
+      due_date: '2051-08-05'
       projectId: 16
     fileParameters: []
     responses: []
@@ -457,7 +457,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: in_progress
+        example: completed
         type: string
         enumValues:
           - not_started
@@ -470,7 +470,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
         required: false
-        example: '2051-07-31'
+        example: '2051-08-05'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -489,8 +489,8 @@ endpoints:
     cleanBodyParameters:
       title: b
       description: 'Eius et animi quos velit et.'
-      status: in_progress
-      due_date: '2051-07-31'
+      status: completed
+      due_date: '2051-08-05'
       projectId: 16
     fileParameters: []
     responses: []
@@ -585,6 +585,45 @@ endpoints:
   -
     httpMethods:
       - GET
+    uri: api/projects/user
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
     uri: 'api/projects/{id}'
     metadata:
       groupName: Endpoints
@@ -611,45 +650,6 @@ endpoints:
         custom: []
     cleanUrlParameters:
       id: architecto
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/projects
-    metadata:
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -991,11 +991,76 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
+      membership_type:
+        name: membership_type
+        description: ''
+        required: true
+        example: viewer
+        type: string
+        enumValues:
+          - owner
+          - admin
+          - member
+          - viewer
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
     cleanBodyParameters:
       user_id: architecto
       project_id: architecto
+      membership_type: viewer
     fileParameters: []
     responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/projects/memberships/{projectId}'
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      projectId:
+        name: projectId
+        description: ''
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      projectId: architecto
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
     responseFields: []
     auth: []
     controller: null
