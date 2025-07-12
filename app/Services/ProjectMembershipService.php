@@ -60,7 +60,7 @@ class ProjectMembershipService
                 email: $newMembership->user->email,
                 inviterName: $loggedInUser->name,
                 projectName: $newMembership->project->name,
-                inviteLink: url("https://www.google.com/")
+                inviteLink: url("https://wisetrolley.com/wp-content/uploads/2024/06/Duck-Middle-Finger-T-shirt-Black-2.jpg")
             )
         );
     }
